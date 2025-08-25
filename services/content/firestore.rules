@@ -1,0 +1,164 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Função para verificar se o usuário está autenticado
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Função para verificar se o usuário é admin
+    function isAdmin() {
+      return isAuthenticated() && 
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // Função para verificar se o usuário tem plano premium
+    function isPremium() {
+      return isAuthenticated() && 
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.subscription.plan in ['premium', 'pro'];
+    }
+    
+    // Regras para coleção de alimentos (foods)
+    match /foods/{foodId} {
+      // Leitura: permitida para todos (dados públicos)
+      allow read: if true;
+      
+      // Escrita: apenas admins podem criar/atualizar/deletar
+      allow create, update, delete: if isAdmin();
+      
+      // Validação de dados para criação/atualização
+      allow write: if isAdmin() && 
+                   validateFoodData(resource.data);
+    }
+    
+    // Regras para coleção de exercícios (exercises)
+    match /exercises/{exerciseId} {
+      // Leitura básica: permitida para todos
+      allow read: if true;
+      
+      // Leitura de orientações premium: apenas para usuários premium
+      allow read: if isPremium() || 
+                     !('premium_guidance' in resource.data) ||
+                     resource.data.premium_guidance == null;
+      
+      // Escrita: apenas admins
+      allow create, update, delete: if isAdmin();
+      
+      // Validação de dados
+      allow write: if isAdmin() && 
+                   validateExerciseData(resource.data);
+    }
+    
+    // Regras para valores MET (met_values)
+    match /met_values/{metId} {
+      // Leitura: permitida para todos
+      allow read: if true;
+      
+      // Escrita: apenas admins
+      allow create, update, delete: if isAdmin();
+      
+      // Validação de dados
+      allow write: if isAdmin() && 
+                   validateMETData(resource.data);
+    }
+    
+    // Regras para usuários (users)
+    match /users/{userId} {
+      // Leitura: apenas o próprio usuário ou admin
+      allow read: if isAuthenticated() && 
+                     (request.auth.uid == userId || isAdmin());
+      
+      // Escrita: apenas o próprio usuário ou admin
+      allow write: if isAuthenticated() && 
+                      (request.auth.uid == userId || isAdmin());
+      
+      // Validação de dados do usuário
+      allow write: if validateUserData(resource.data);
+    }
+    
+    // Regras para treinos (workouts)
+    match /workouts/{workoutId} {
+      // Leitura: apenas o dono do treino ou admin
+      allow read: if isAuthenticated() && 
+                     (resource.data.userId == request.auth.uid || isAdmin());
+      
+      // Escrita: apenas o dono do treino ou admin
+      allow write: if isAuthenticated() && 
+                      (resource.data.userId == request.auth.uid || isAdmin());
+      
+      // Validação de dados do treino
+      allow write: if validateWorkoutData(resource.data);
+    }
+    
+    // Regras para nutrição (nutrition)
+    match /nutrition/{nutritionId} {
+      // Leitura: apenas o dono dos dados ou admin
+      allow read: if isAuthenticated() && 
+                     (resource.data.userId == request.auth.uid || isAdmin());
+      
+      // Escrita: apenas o dono dos dados ou admin
+      allow write: if isAuthenticated() && 
+                      (resource.data.userId == request.auth.uid || isAdmin());
+      
+      // Validação de dados nutricionais
+      allow write: if validateNutritionData(resource.data);
+    }
+    
+    // Funções de validação
+    function validateFoodData(data) {
+      return data.keys().hasAll(['name', 'category', 'nutritional_info']) &&
+             data.name is string &&
+             data.category is string &&
+             data.nutritional_info is map &&
+             data.nutritional_info.keys().hasAll(['calories', 'protein', 'carbs', 'fat']) &&
+             data.nutritional_info.calories is number &&
+             data.nutritional_info.protein is number &&
+             data.nutritional_info.carbs is number &&
+             data.nutritional_info.fat is number;
+    }
+    
+    function validateExerciseData(data) {
+      return data.keys().hasAll(['name', 'primary_muscle_group', 'exercise_type', 'equipment', 'difficulty', 'description', 'instructions']) &&
+             data.name is string &&
+             data.primary_muscle_group is string &&
+             data.exercise_type is string &&
+             data.equipment is list &&
+             data.difficulty is string &&
+             data.description is string &&
+             data.instructions is list;
+    }
+    
+    function validateMETData(data) {
+      return data.keys().hasAll(['activity', 'met_value', 'exercise_type']) &&
+             data.activity is string &&
+             data.met_value is number &&
+             data.met_value > 0 &&
+             data.exercise_type is string;
+    }
+    
+    function validateUserData(data) {
+      return data.keys().hasAll(['email', 'name']) &&
+             data.email is string &&
+             data.name is string &&
+             data.email.matches('.*@.*\\..*');
+    }
+    
+    function validateWorkoutData(data) {
+      return data.keys().hasAll(['userId', 'name', 'exercises']) &&
+             data.userId is string &&
+             data.name is string &&
+             data.exercises is list &&
+             data.userId == request.auth.uid;
+    }
+    
+    function validateNutritionData(data) {
+      return data.keys().hasAll(['userId', 'date', 'meals']) &&
+             data.userId is string &&
+             data.date is timestamp &&
+             data.meals is list &&
+             data.userId == request.auth.uid;
+    }
+  }
+}
+

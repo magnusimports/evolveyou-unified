@@ -1,0 +1,68 @@
+# FastAPI e dependências web
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+pydantic==2.11.7
+pydantic-settings==2.10.1
+
+# Firebase e Google Cloud
+firebase-admin==6.2.0
+google-cloud-firestore==2.13.1
+google-cloud-pubsub==2.23.1
+
+# Autenticação e segurança
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+python-multipart==0.0.6
+
+# HTTP e comunicação
+httpx==0.25.2
+requests==2.31.0
+aiohttp==3.9.1
+
+# Utilitários
+python-dateutil==2.8.2
+pytz==2023.3
+environs==14.3.0
+
+# Rate limiting e cache
+slowapi==0.1.9
+limits==5.5.0
+redis==5.0.1
+
+# Logs e monitoramento
+structlog==23.2.0
+python-json-logger==2.0.7
+
+# Matemática e algoritmos
+numpy==1.24.3
+scipy==1.11.4
+pandas==2.1.4
+
+# Validação e formatação
+email-validator==2.1.0
+phonenumbers==8.13.25
+
+# Testes
+pytest==7.4.3
+pytest-asyncio==0.21.1
+pytest-cov==4.1.0
+httpx==0.25.2
+pytest-mock==3.12.0
+
+# Desenvolvimento
+black==23.12.1
+isort==5.13.2
+flake8==6.1.0
+mypy==1.7.1
+
+# Templates e apresentação
+jinja2==3.1.2
+markdown==3.5.1
+
+# Processamento de dados
+orjson==3.9.10
+msgpack==1.0.7
+
+# CORS
+fastapi-cors==0.0.6
+

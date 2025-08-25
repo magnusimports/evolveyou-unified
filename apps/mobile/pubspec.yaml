@@ -1,0 +1,82 @@
+name: evolveyou_app
+description: "EvolveYou - Transforme sua vida através da tecnologia fitness"
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.5.4 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # UI & Design
+  cupertino_icons: ^1.0.8
+  google_fonts: ^6.2.1
+  flutter_svg: ^2.0.10+1
+  lottie: ^3.1.2
+  
+  # State Management
+  provider: ^6.1.2
+  flutter_riverpod: ^2.5.1
+  
+  # Navigation
+  go_router: ^14.2.7
+  
+  # Network & API
+  http: ^1.2.2
+  dio: ^5.7.0
+  connectivity_plus: ^6.0.5
+  
+  # Storage & Security
+  shared_preferences: ^2.3.2
+  flutter_secure_storage: ^9.2.2
+  
+  # Authentication
+  firebase_auth: ^5.3.1
+  firebase_core: ^3.6.0
+  google_sign_in: ^6.2.1
+  
+  # Forms & Validation
+  flutter_form_builder: ^9.4.1
+  form_builder_validators: ^11.0.0
+  
+  # Utils
+  intl: ^0.19.0
+  logger: ^2.4.0
+  equatable: ^2.0.5
+  
+  # Animations
+  flutter_animate: ^4.5.0
+  
+  # Charts & Graphs
+  fl_chart: ^0.69.0
+  
+  # Device Features
+  permission_handler: ^11.3.1
+  device_info_plus: ^10.1.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  build_runner: ^2.4.13
+  json_annotation: ^4.9.0
+  json_serializable: ^6.8.0
+
+flutter:
+  uses-material-design: true
+  
+  assets:
+    - assets/images/
+    - assets/icons/
+    - assets/animations/
+    - assets/fonts/
+  
+  fonts:
+    - family: EvolveYou
+      fonts:
+        - asset: assets/fonts/EvolveYou-Regular.ttf
+        - asset: assets/fonts/EvolveYou-Bold.ttf
+          weight: 700

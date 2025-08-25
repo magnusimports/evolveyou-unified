@@ -1,0 +1,56 @@
+{
+  "name": "evolveyou-unified",
+  "version": "1.0.0",
+  "description": "EvolveYou - Plataforma Completa de Saúde e Fitness",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "services/*"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev --parallel",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "clean": "turbo run clean",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "install:all": "./scripts/install.sh",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "deploy:staging": "./scripts/deploy/staging.sh",
+    "deploy:prod": "./scripts/deploy/production.sh"
+  },
+  "devDependencies": {
+    "turbo": "^1.10.0",
+    "prettier": "^3.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
+    "eslint-config-prettier": "^9.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/magnusimports/evolveyou-unified.git"
+  },
+  "author": "Magnus Imports",
+  "license": "PROPRIETARY",
+  "keywords": [
+    "health",
+    "fitness",
+    "nutrition",
+    "mobile",
+    "web",
+    "ai",
+    "flutter",
+    "react",
+    "fastapi",
+    "firebase",
+    "gcp"
+  ]
+}
+

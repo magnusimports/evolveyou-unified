@@ -1,0 +1,183 @@
+version: '3.8'
+
+services:
+  # ===== BACKEND SERVICES =====
+  
+  users-service:
+    build: 
+      context: ./services/users
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8080"
+    environment:
+      - ENVIRONMENT=development
+      - DEBUG=true
+      - FIREBASE_PROJECT_ID=evolveyou-prod
+      - PORT=8080
+    volumes:
+      - ./services/users:/app
+      - /app/node_modules
+    depends_on:
+      - redis
+    networks:
+      - evolveyou-network
+
+  content-service:
+    build:
+      context: ./services/content-service
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8080"
+    environment:
+      - ENVIRONMENT=development
+      - DEBUG=true
+      - FIREBASE_PROJECT_ID=evolveyou-prod
+      - PORT=8080
+    volumes:
+      - ./services/content-service:/app
+      - /app/node_modules
+    depends_on:
+      - redis
+    networks:
+      - evolveyou-network
+
+  health-check-service:
+    build:
+      context: ./services/health-check
+      dockerfile: Dockerfile
+    ports:
+      - "8083:8080"
+    environment:
+      - ENVIRONMENT=development
+      - DEBUG=true
+      - PORT=8080
+    volumes:
+      - ./services/health-check:/app
+      - /app/node_modules
+    networks:
+      - evolveyou-network
+
+  backend-service:
+    build:
+      context: ./services/backend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - ENVIRONMENT=development
+      - DEBUG=true
+      - FIREBASE_PROJECT_ID=evolveyou-prod
+      - PORT=8080
+      - USERS_SERVICE_URL=http://users-service:8080
+      - CONTENT_SERVICE_URL=http://content-service:8080
+      - HEALTH_CHECK_SERVICE_URL=http://health-check-service:8080
+    volumes:
+      - ./services/backend:/app
+      - /app/node_modules
+    depends_on:
+      - users-service
+      - content-service
+      - health-check-service
+      - redis
+    networks:
+      - evolveyou-network
+
+  # ===== FRONTEND APPLICATIONS =====
+  
+  web-app:
+    build:
+      context: ./apps/web
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - REACT_APP_API_URL=http://localhost:8080
+      - REACT_APP_FIREBASE_PROJECT_ID=evolveyou-prod
+    volumes:
+      - ./apps/web:/app
+      - /app/node_modules
+    depends_on:
+      - backend-service
+    networks:
+      - evolveyou-network
+
+  admin-app:
+    build:
+      context: ./apps/admin
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3000"
+    environment:
+      - NODE_ENV=development
+      - REACT_APP_API_URL=http://localhost:8080
+      - REACT_APP_FIREBASE_PROJECT_ID=evolveyou-prod
+    volumes:
+      - ./apps/admin:/app
+      - /app/node_modules
+    depends_on:
+      - backend-service
+    networks:
+      - evolveyou-network
+
+  # ===== INFRASTRUCTURE =====
+  
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - evolveyou-network
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./infrastructure/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./infrastructure/nginx/ssl:/etc/nginx/ssl
+    depends_on:
+      - backend-service
+      - web-app
+      - admin-app
+    networks:
+      - evolveyou-network
+
+  # ===== MONITORING =====
+  
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./infrastructure/monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    networks:
+      - evolveyou-network
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3002:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./infrastructure/monitoring/grafana:/etc/grafana/provisioning
+    depends_on:
+      - prometheus
+    networks:
+      - evolveyou-network
+
+volumes:
+  redis_data:
+  prometheus_data:
+  grafana_data:
+
+networks:
+  evolveyou-network:
+    driver: bridge
+
