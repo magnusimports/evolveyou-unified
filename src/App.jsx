@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './hooks/useAuth.jsx';
 import AuthPage from './components/auth/AuthPage';
-import OnboardingPage from './pages/OnboardingPage';
+import OnboardingOriginal from './pages/OnboardingOriginal';
 import DashboardPage from './pages/DashboardPage';
 import LoadingSpinner from './components/ui/LoadingSpinner';
 import './App.css';
@@ -69,7 +69,7 @@ const AppRoutes = () => {
         path="/onboarding" 
         element={
           <ProtectedRoute>
-            <OnboardingPage />
+            <OnboardingOriginal />
           </ProtectedRoute>
         } 
       />
