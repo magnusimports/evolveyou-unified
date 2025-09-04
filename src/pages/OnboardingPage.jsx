@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Checkbox } from '@/components/ui/checkbox';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { ArrowLeft, ArrowRight, CheckCircle, Loader2 } from 'lucide-react';
-import { useAuth } from '../hooks/useAuth.jsx';
+import { useAuth } from '../hooks/useFirebaseAuth.jsx';
 import { anamneseQuestions, calculateBMR, calculateTDEE, calculateBMI, classifyBMI, calculateMacros } from '../data/anamneseQuestions';
 
 const OnboardingPage = () => {

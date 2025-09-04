@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Checkbox } from '@/components/ui/checkbox';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { ArrowLeft, ArrowRight, CheckCircle, Loader2, Plus, Trash2 } from 'lucide-react';
-import { useAuth } from '../hooks/useAuth.jsx';
+import { useAuth } from '../hooks/useFirebaseAuth.jsx';
 import { anamneseOriginal, calculateAdjustedBMR, calculateTDEE as calcTDEE } from '../data/anamneseOriginal.js';
 
 const OnboardingOriginal = () => {
@@ -229,18 +229,9 @@ const OnboardingOriginal = () => {
       // Calcular resultados usando algoritmos originais
       const results = calculateResults();
       
-      // Salvar perfil do usuário com onboarding completo
-      const userProfile = {
-        profile: {
-          onboardingCompleted: true,
-          anamneseCompleted: true,
-          anamnese: answers,
-          calculations: results,
-          completedAt: new Date().toISOString()
-        }
-      };
-
-      await updateUserProfile(userProfile);
+      // Salvar dados no Firestore usando o serviço
+      const firestoreService = (await import('../services/firestoreService.js')).default;
+      await firestoreService.saveAnamneseResults(user.uid, answers, results);
       
       // Navegar para dashboard
       navigate('/dashboard');

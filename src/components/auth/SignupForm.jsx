@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Loader2, Eye, EyeOff, Mail, Lock, User } from 'lucide-react';
-import { useAuth } from '../../hooks/useAuth.jsx';
+import { useAuth } from '../../hooks/useFirebaseAuth.jsx';
 
 const SignupForm = ({ onToggleMode }) => {
   const [formData, setFormData] = useState({

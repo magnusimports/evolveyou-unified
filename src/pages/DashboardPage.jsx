@@ -20,7 +20,7 @@ import {
   Dumbbell,
   Brain
 } from 'lucide-react';
-import { useAuth } from '../hooks/useAuth.jsx';
+import { useAuth } from '../hooks/useFirebaseAuth.jsx';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
 import CoachEVO from '../components/dashboard/CoachEVO';
 import NutritionTab from '../components/dashboard/NutritionTab';

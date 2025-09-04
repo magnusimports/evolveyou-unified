@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from './hooks/useAuth.jsx';
+import { AuthProvider, useAuth } from './hooks/useFirebaseAuth.jsx';
 import AuthPage from './components/auth/AuthPage';
 import OnboardingOriginal from './pages/OnboardingOriginal';
 import DashboardPage from './pages/DashboardPage';
