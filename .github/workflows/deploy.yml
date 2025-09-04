@@ -3,8 +3,6 @@ name: Deploy EvolveYou
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
 jobs:
   build-and-deploy:
@@ -21,13 +19,11 @@ jobs:
         
     - name: Install dependencies
       working-directory: ./apps/web
-      run: |
-        npm install -g pnpm
-        pnpm install
+      run: npm install
         
     - name: Build frontend
       working-directory: ./apps/web
-      run: pnpm run build
+      run: npm run build
       
     - name: Deploy to Netlify
       uses: nwtgck/actions-netlify@v2.0
@@ -43,5 +39,5 @@ jobs:
       env:
         NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
         NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-      timeout-minutes: 5
+      timeout-minutes: 10
 
