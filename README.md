@@ -189,18 +189,33 @@ docker-compose up -d
 ### **🏗️ Ambientes**
 - **Development:** Local Docker
 - **Staging:** GCP Cloud Run
-- **Production:** GCP Cloud Run + CDN
+- **Production:** Netlify + GitHub Actions
 
-### **📦 CI/CD**
-- **Build:** Cloud Build
+### **📦 CI/CD Automático**
+- **Build:** GitHub Actions
 - **Test:** Automated testing
-- **Deploy:** Blue-green deployment
-- **Rollback:** Automatic rollback
+- **Deploy:** Netlify (automático)
+- **Rollback:** Git revert + redeploy
 
-### **🔄 Pipeline**
+### **🔄 Pipeline Automático**
 ```
-Code → Build → Test → Deploy → Monitor
+Push → GitHub Actions → Build → Test → Deploy → Monitor
 ```
+
+### **⚙️ Configuração do Deploy Automático**
+
+1. **Fork este repositório**
+2. **Configure os secrets no GitHub:**
+   ```
+   NETLIFY_AUTH_TOKEN: seu_token_netlify
+   NETLIFY_SITE_ID: seu_site_id
+   ```
+3. **O deploy acontece automaticamente** a cada push na branch `main`
+
+### **🌐 URLs da Aplicação**
+- **Produção:** [https://evolveyou-app.netlify.app](https://evolveyou-app.netlify.app)
+- **Desenvolvimento:** [http://localhost:5173](http://localhost:5173)
+- **API:** [https://evolveyou-app.netlify.app/api](https://evolveyou-app.netlify.app/api)
 
 ---
 
