@@ -1,6 +1,6 @@
 [build]
   base = "apps/web"
-  publish = "apps/web/dist"
+  publish = "dist"
   command = "npm install --legacy-peer-deps && npm run build"
 
 [build.environment]
@@ -17,6 +17,6 @@
   status = 200
 
 [functions]
-  directory = "apps/web/netlify/functions"
+  directory = "netlify/functions"
   node_bundler = "esbuild"
 
