@@ -229,11 +229,15 @@ const OnboardingOriginal = () => {
       // Calcular resultados usando algoritmos originais
       const results = calculateResults();
       
-      // Salvar perfil do usuário
+      // Salvar perfil do usuário com onboarding completo
       const userProfile = {
-        anamnese: answers,
-        calculations: results,
-        completedAt: new Date().toISOString()
+        profile: {
+          onboardingCompleted: true,
+          anamneseCompleted: true,
+          anamnese: answers,
+          calculations: results,
+          completedAt: new Date().toISOString()
+        }
       };
 
       await updateUserProfile(userProfile);
