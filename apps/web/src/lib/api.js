@@ -1,7 +1,7 @@
 // Cliente da API para comunicação com o backend
 const API_BASE_URL = process.env.NODE_ENV === 'production' 
-  ? '/api' 
-  : 'http://localhost:5000/api';
+  ? 'https://8001-i2wak5c93q5w96a47ob9j-21e988e7.manusvm.computer' 
+  : 'https://8001-i2wak5c93q5w96a47ob9j-21e988e7.manusvm.computer';
 
 class ApiClient {
   constructor() {
