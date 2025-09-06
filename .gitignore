@@ -184,3 +184,6 @@ Thumbs.db
 .cache/
 .turbo/
 
+serviceAccountKey.json
+*.env
+.env.local
